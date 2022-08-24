@@ -1,41 +1,40 @@
-// Add imports above this line
 import { galleryItems } from './gallery-items';
 // Change code below this line
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
+const galleryContainer = document.querySelector('.gallery');
+const imgMarkup = createGalleryItemMarkup(galleryItems);
 
+galleryContainer.insertAdjacentHTML('beforeend', imgMarkup);
 
-console.log(galleryItems);
+galleryContainer.addEventListener('click', onGalleryContainerClick);
 
-const galleryList = document.querySelector('.gallery');
-const itemsMarkup = galleryItems.map(({ preview, original, description }) => {
-    return `
-  <div class="gallery__item">
-  <a class="gallery__link" href="${original}">
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</div>
-`
-}).join('');
+function createGalleryItemMarkup(img) {
+    return img.map(({ preview, original, description }) => {
+        return `<div class="gallery__item">
+                        <a class="gallery__item"
+                        href="${original}">
+                        <img class="gallery__image"
+                        src="${preview}"
+                        alt="${description}" />
+                </a>
+                    </div>`;
+    }).join('')
 
+}
 
-galleryList.insertAdjacentHTML('afterbegin', itemsMarkup);
-galleryList.addEventListener('click', onGalleryListClick);
+function onGalleryContainerClick(evt) {
+    evt.preventDefault();
+    if (!evt.target.classList.contains("gallery__image")) {
+        return;
+    };
+    imageModalClick()
+}
 
-function onGalleryListClick(event) {
-    event.preventDefault();
-
-    if (!event.target.classList.contains('gallery__image')) return;
-    const lightbox = new SimpleLightbox('.gallery a', {
-        captionsData: 'alt',
-        captionPosition: 'bottom',
-        captionDelay: 250,
-    });
-
-};
+new SimpleLightbox('.gallery a', {
+    navText: ['<', '>'],
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+});

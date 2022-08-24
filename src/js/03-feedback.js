@@ -50,3 +50,4 @@ function onPopulateTextarea() {
         formData.email = email;
         formData.message = message;
     }
+}
